@@ -1,6 +1,7 @@
 import { UnsplashImage } from "@/models/unsplash-image";
 import Image from "next/image"; //allows for auto resizing if images are b i g
 import Link from "next/link";
+import { Alert } from "@/components/bootstrap";
 
 export const metadata = {
     title: 'Static fetching - Next-test'
@@ -18,6 +19,10 @@ export default async function Page() {
 
     return(
         <div className="d-flex flex-column align align-items-center">
+            <Alert>
+                This page <strong>fetches and caches data at build time. </strong>
+                Even though the Unsplash API always returns a new image, we see the same image after refreshing the page until we compile the project again.
+            </Alert>
             <Image
                 src={image.urls.raw}
                 width={width}
