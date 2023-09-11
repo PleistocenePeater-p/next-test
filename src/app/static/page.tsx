@@ -2,6 +2,10 @@ import { UnsplashImage } from "@/models/unsplash-image";
 import Image from "next/image"; //allows for auto resizing if images are b i g
 import Link from "next/link";
 
+export const metadata = {
+    title: 'Static fetching - Next-test'
+  }
+
 export default async function Page() {
     const response = await fetch("https://api.unsplash.com/photos/random?client_id=" + process.env.UNSPLASH_ACCESS_KEY); //safe; server component only runs on server
     const image: UnsplashImage = await response.json(); //Can specify the type of image, imports from Models
