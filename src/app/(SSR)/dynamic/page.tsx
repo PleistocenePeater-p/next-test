@@ -4,25 +4,31 @@ import Link from "next/link";
 import { Alert } from "@/components/bootstrap";
 
 export const metadata = {
-    title: 'Static fetching - Next-test'
-  }
+    title: 'Dynamic fetching - Next-test'
+}
+
+export const revalidate = 0; //revalidate upon refreshing
 
 export default async function Page() {
-    const response = await fetch("https://api.unsplash.com/photos/random?client_id=" + process.env.UNSPLASH_ACCESS_KEY); //safe; server component only runs on server
+    //copied from static/page.tsx:
+    const response = await fetch("https://api.unsplash.com/photos/random?client_id=" + process.env.UNSPLASH_ACCESS_KEY, 
+    {
+        //cache: "no-cache" //option similar to revalidate = 0, but for a specific fetch call. Allows other cached fetch calls on the page.
+        //cache: "no-store" //same functionality as no-cache, fetches dynamically every time
+        //next: { revalidate: 0 } //another option for individual fetch requests at timed intervals
+    }
+    );
     const image: UnsplashImage = await response.json(); //Can specify the type of image, imports from Models
-
-    //dynamically resizing image
     const width = Math.min(500, image.width);
-    //if width is 400, return 400; if 1750, return 500
     const height = (width / image.width) * image.height;
-    //new height to match aspect ratio
 
     return(
         <div className="d-flex flex-column align align-items-center">
             <Alert>
-                This page <strong>fetches and caches data at build time. </strong>
-                Even though the Unsplash API always returns a new image, we see the same image after refreshing the page until we compile the project again.
+                This page <strong>fetches data dynamically. </strong>
+                Every time you refresh the page, you get a new image from the Unsplash API. 
             </Alert>
+
             <Image
                 src={image.urls.raw}
                 width={width}
@@ -32,5 +38,5 @@ export default async function Page() {
             />
             by <Link href={"/users/" + image.user.username}>{image.user.username}</Link>
         </div>
-    )
+    );
 }
