@@ -2,6 +2,7 @@ import { UnsplashImage } from "@/models/unsplash-image";
 import Image from "next/image";
 import styles from "./TopicPage.module.css";
 import { Alert } from "@/components/bootstrap";
+import { Metadata } from "next";
 
 //export const revalidate = 0; //To fetch a new set of 10 images
 //export const dynamicParams = false; //To prohibit fetches outside of what is fetched in advance (health, fitness, coding). Results in Not Found
@@ -10,6 +11,12 @@ import { Alert } from "@/components/bootstrap";
 interface PageProps {
     params: { topic: string }, //topic name => URL
     //searchParams: { [key: string], string | string[] | undefined }, //optional search params
+}
+
+export function generateMetadata({ params: { topic } }: PageProps): Metadata {
+    return {
+        title: topic + " - Next-test"
+    }
 }
 
 //Rendering pages in advance
